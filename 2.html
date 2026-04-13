@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentos Pendentes - DocZ</title>
+
+    <style>
+        /* ===== RESET GLOBAL ===== */
+        html, body {
+            margin: 0; padding: 0; border: 0;
+            background: #fafafa;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #595959;
+            line-height: 20px;
+        }
+
+        /* ===== MODAL ===== */
+        #popup-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999;
+        }
+
+        .ui-dialog {
+            background: #585858;
+            padding: 5px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            width: 550px;
+            max-width: 95%;
+        }
+
+        .ui-dialog-titlebar {
+            background: url("https://docz.sosdocs.com.br/Docz/app/images/backgrounds/titleBg.png") repeat-x 0 0;
+            border-bottom: 1px solid #cdcdcd;
+            height: 36px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .ui-dialog-title {
+            font-weight: bold;
+            color: #595959;
+            font-size: 13px;
+        }
+
+        .ui-dialog-content {
+            background-color: #fafafa;
+            padding: 15px;
+        }
+
+        /* ===== QUADRO DE LISTAGEM ===== */
+        .lotes-container {
+            border: 1px solid #ccc;
+            background: #f4f4f4;
+            border-radius: 3px;
+            padding: 0;
+            margin-bottom: 15px;
+        }
+
+        .lotes-header {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            font-size: 13px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .lotes-list {
+            background: #fff;
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+
+        .lote-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .lote-item:last-child { border-bottom: none; }
+
+        .doc-info {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #595959;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .doc-info:hover { text-decoration: underline; color: #000; }
+
+        .info-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #5da5da;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 16px;
+            font-size: 10px;
+            font-family: serif;
+            font-style: italic;
+            font-weight: bold;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        /* ===== BOTÕES PADRÃO DOCZ ===== */
+        .button-wrapper {
+            text-align: right;
+            border-top: 1px double #ccc;
+            padding-top: 15px;
+        }
+
+        .btn-docz {
+            font-size: 11px;
+            font-weight: bold;
+            background-image: url("https://docz.sosdocs.com.br/Docz/app/images/ui/usualButtons.png");
+            background-repeat: repeat-x;
+            text-transform: uppercase;
+            cursor: pointer;
+            padding: 8px 20px;
+            border-radius: 2px;
+            color: #fff;
+            display: inline-block;
+            border: none;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* Cores de Fundo dos Botões (Sprite position) */
+        .greenB { background-position: 0 -425px; border: 1px solid #7ca82a; }
+        .redB { background-position: 0 -170px; border: 1px solid #9f352b; }
+
+        /* Estilo menor para o botão dentro da lista */
+        .btn-list {
+            font-size: 10px;
+            padding: 4px 12px;
+        }
+
+        .close-x {
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="popup-backdrop">
+    <div class="ui-dialog">
+        <div class="ui-dialog-titlebar">
+            <span class="ui-dialog-title">Documentos com Assinaturas Pendentes</span>
+            <a href="javascript:void(0)" onclick="fechar()" class="close-x">✖</a>
+        </div>
+
+        <div class="ui-dialog-content">
+            <div class="lotes-container">
+                <div class="lotes-header">
+                    Existem Documentos com assinatura Pendente:
+                </div>
+                
+                <ul class="lotes-list">
+                    <li class="lote-item">
+                        <a href="javascript:void(0)" class="doc-info" onclick="detalhesDoc('DC0000000001SOS')">
+                            <span class="info-icon">i</span> DC0000000001SOS - AGUARDANDO ASSINATURA
+                        </a>
+                        <button class="btn-docz greenB btn-list" onclick="fluxoAssinatura('DC0000000001SOS')">Assinar</button>
+                    </li>
+                    <li class="lote-item">
+                        <a href="javascript:void(0)" class="doc-info" onclick="detalhesDoc('DC0000000002SOS')">
+                            <span class="info-icon">i</span> DC0000000002SOS - AGUARDANDO ASSINATURA
+                        </a>
+                        <button class="btn-docz greenB btn-list" onclick="fluxoAssinatura('DC0000000002SOS')">Assinar</button>
+                    </li>
+                    <li class="lote-item">
+                        <a href="javascript:void(0)" class="doc-info" onclick="detalhesDoc('DC0000000003SOS')">
+                            <span class="info-icon">i</span> DC0000000003SOS - AGUARDANDO ASSINATURA
+                        </a>
+                        <button class="btn-docz greenB btn-list" onclick="fluxoAssinatura('DC0000000003SOS')">Assinar</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="button-wrapper">
+                <button class="btn-docz redB" onclick="fechar()">Assinar Depois</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function fechar() {
+        document.getElementById("popup-backdrop").style.display = "none";
+    }
+
+    function detalhesDoc(id) {
+        alert("Visualizando detalhes do documento: " + id);
+    }
+
+    function fluxoAssinatura(id) {
+        alert("Iniciando o fluxo de assinatura para o documento: " + id);
+    }
+</script>
+
+</body>
+</html>
